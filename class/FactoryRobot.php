@@ -1,25 +1,41 @@
 <?php
 require_once 'Robot.php';
 
-use Robot;
-
 class FactoryRobot
 {
-    private $typeRobot;
+    public $Robots;
 
-    function addType(Robot $robot)
+    /** 
+     * * param $count - counts of robots
+     * param $paramsRobot - params of the robots(type,height,weigth,speed)
+     */
+    function createRobot($count = 1, $paramsRobot = [])
     {
-        $this->addType[] = $robot;
-    }
-    function createRobot($count,$paramsRobot)
-    {
-        $rez = [];
+        $paramsRobot['type'] = isset($paramsRobot['type']) ? $paramsRobot['type'] : rand(7, 34);
         for ($i = 0; $i < $count; $i++) {
-            $rez[]=new Robot($paramsRobot);
+            $this->Robots[] = new Robot($paramsRobot);
         }
+        return $this;
     }
 
-    function mergeRobot(){
-        
+    /**
+     * Merged to robots
+     * return Object Robot
+     * 
+     */
+    function mergeRobot()
+    {
+        if (!empty($this->Robots)) {
+            $tmpRobot = [];
+            $minArray = [];
+            foreach ($this->Robots as $robot) {
+                $tmpRobot['height'] += $robot->height;
+                $tmpRobot['weight'] += $robot->weight;
+                $minArray[] = $robot->speed;
+                $tmpRobot['type'] = $robot->type;
+            }
+            $tmpRobot['speed'] = min($minArray);
+            return new Robot($tmpRobot);
+        }
     }
 }
