@@ -35,4 +35,6 @@ class Robot
     function getWeight(){
         return $this->weight;
     }
+
+
 }
